@@ -1,6 +1,10 @@
 //(()=>{
 const socket = io.connect();
+<<<<<<< HEAD
 //
+=======
+
+>>>>>>> happy-ending
 /*
 let admin;
 
