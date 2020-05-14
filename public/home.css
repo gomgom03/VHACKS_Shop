@@ -1,4 +1,98 @@
+html{
+    height:100%;
+}
+body{
+    height:100%;
+    font-family: Calibri, sans-serif;
+    background-color: #bad5ff;
+    color:white;
+    margin:0;
+    overflow-x: hidden;
+}
+
+.message{
+    z-index: -1;
+    position:absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    top: 5%;
+    width: 70%;
+    border-radius:7px;
+    opacity: 0%;
+    transition: 1s;
+    text-align: center;
+    vertical-align: middle;
+    color: white;
+}
+
+#errorMessage{
+    background-color:red;
+}
+
+#successMessage{
+    background-color:#77ff00;
+}
+
+#all{
+    position: absolute;
+    top: 14%;
+    width: 100%;
+}
+
+h1{
+    margin:0;
+    font-size:500%;
+    text-align: center;
+    background-color:#7db0ff
+}
+
 #container{
+    text-align: center;
     width: 100%;
     height: 100%;
+}
+
+.storeContainer{
+    display:block
+}
+
+.itemElem{
+    display:inline-block;
+}
+
+button{
+    font-family: Calibri, sans-serif;
+    border-radius: 6px;
+    border-width: 3px;
+}
+
+
+#goBack{
+    z-index: 0;
+    border-radius:0;
+    position: absolute;
+    left: 0%;
+    top: 0%;
+    width: 100%;
+    font-size: 200%;
+    opacity:0.1;
+    transition: 0.3s;
+    border-style:solid;
+    border-color:transparent;
+    color:#4891ff;
+    background-color:#bad5ff;
+}
+#goBack:hover{
+    color:#2161c4;
+    opacity:0.8;
+    font-size: 240%;
+    background-color:#f0f6ff;
+}
+#goBack:active{
+    color:#2161c4;
+    opacity:1;
+    font-size: 240%;
+    background-color:white;
 }
