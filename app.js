@@ -1,8 +1,6 @@
 const express = require('express');
 const app = express();
 const fs = require('fs');
-//const nodemailer = require('nodemailer')
-//const sgTransport = require('nodemailer-sendgrid-transport')
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -69,7 +67,7 @@ function writeData(path, data) {
 
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
-const port = 3000;
+const port = process.env.PORT || 80;
 
 const server = app.listen(port, () => {
     console.log(`listening to port ${port}`);
@@ -111,7 +109,7 @@ io.on('connection', (socket) => {
     socket.on('adminChangeRequest', (data) => {
         logData('adminChangeRequest', data, socket.id);
         if (data.credentials.id === admin.id && data.credentials.password === admin.password) {
-            //sendMail(admin.email, "Your admin information has been changed.", `The admin has changed to id: ${data.change.id} and email: ${data.change.email}`);
+            sendMail(admin.email, "Your admin information has been changed.", `The admin has changed to id: ${data.change.id} and email: ${data.change.email}`);
             admin = data.change;
             writeData(adminPath, admin);
             socket.emit('adminChangeResponse', { response: true })
