@@ -1,6 +1,6 @@
-//(()=>{
+(()=>{
 
-//window.onbeforeunload = () => true;
+window.onbeforeunload = () => true;
 
 const socket = io.connect();
 let store;
@@ -849,6 +849,6 @@ function createStore() {
     }
 }
 
-purchaseHistory();
+startApp();
 
-//})();
+})();

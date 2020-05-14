@@ -10,7 +10,7 @@ function sendMail(email, subject, text) {
         from: 'gomgom03@gmail.com',
         subject: subject,
         text: text,
-        //html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+        //html: '',
     };
 
     sgMail
@@ -33,7 +33,7 @@ let admin;
 let store;
 let userCredits;
 let requests = {};
-let purchaseHistory;
+let purchaseHistory = {};
 
 fs.readFile(adminPath, function (err, data) {
     if (err) throw err;
@@ -51,11 +51,7 @@ fs.readFile(userCreditsPath, function (err, data) {
     console.log(store);
 });
 writeData(requestsPath, requests);
-fs.readFile(purchaseHistoryPath, function (err, data) {
-    if (err) throw err;
-    purchaseHistory = JSON.parse(data);
-    console.log(store);
-});
+writeData(purchaseHistoryPath, purchaseHistory);
 
 function writeData(path, data) {
     fs.writeFile(path, JSON.stringify(data), () => {
@@ -67,7 +63,7 @@ function writeData(path, data) {
 
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
-const port = process.env.PORT || 80;
+const port = process.env.PORT || 3000;
 
 const server = app.listen(port, () => {
     console.log(`listening to port ${port}`);
