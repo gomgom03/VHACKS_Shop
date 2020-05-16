@@ -79,13 +79,13 @@ io.on('connection', (socket) => {
 
     socket.on('userRequest', (data) => {
         logData('userRequest', data, socket.id);
-        socket.emit('userResponse', { response: userCredits[data.id] != null && data.password === userCredits[data.id].password, credits: userCredits[data.id]!=null? userCredits[data.id].credits:null });
+        socket.emit('userResponse', { response: userCredits[data.id] != null && data.password === userCredits[data.id].password, credits: userCredits[data.id] != null ? userCredits[data.id].credits : null });
     })
     socket.on('storeRequest', () => {
         socket.emit('storeResponse', store);
     })
-    
-    socket.on('purchaseHistoryRequest', (data)=>{
+
+    socket.on('purchaseHistoryRequest', (data) => {
         logData('purchaseHistoryRequest', data, socket.id);
         if (data.credentials.id === admin.id && data.credentials.password === admin.password) {
             socket.emit('purchaseHistoryResponse', { response: true, history: purchaseHistory })
@@ -118,7 +118,7 @@ io.on('connection', (socket) => {
     })
     socket.on('userCreditsChangeRequest', (data) => {
         logData('userCreditsChangeRequest', data, socket.id);
-        if (data.credentials.id === admin.id && data.credentials.password === admin.password && userCredits[data.change.id] == null&&data.change.id!==""&&data.change.password!=="") {
+        if (data.credentials.id === admin.id && data.credentials.password === admin.password && userCredits[data.change.id] == null && data.change.id !== "" && data.change.password !== "") {
             userCredits[data.change.id] = data.change;
             writeData(userCreditsPath, userCredits);
             socket.emit('userCreditsChangeResponse', { response: true })
@@ -132,10 +132,10 @@ io.on('connection', (socket) => {
         let tempStoreItem = store[data.change.item];
         if (tempCredits != null && data.credentials.password === tempCredits.password) {
             if (tempCredits.credits >= tempStoreItem.amount * data.change.quantity && tempStoreItem.quantity >= data.change.quantity) {
-                purchaseHistory[(new Date()).toString()] = {user: data.credentials.id, item: `$${tempStoreItem.amount} ${tempStoreItem.item}`, quantity: data.change.quantity};
-                writeData(purchaseHistoryPath,purchaseHistory);
+                purchaseHistory[(new Date()).toString()] = { user: data.credentials.id, item: `$${tempStoreItem.amount} ${tempStoreItem.item}`, quantity: data.change.quantity };
+                writeData(purchaseHistoryPath, purchaseHistory);
                 sendMail(admin.email, `User ${data.credentials.id} Purchase`, `The user [${data.credentials.id}] has purchased ${data.change.quantity} $${tempStoreItem.amount} ${tempStoreItem.item}(s). \n\nThe requesting user's email address is: ${tempCredits.email}`);
-                sendMail(tempCredits.email, 'VHACKS Store New Purchase!',`You have requested to purchase ${data.change.quantity} $${tempStoreItem.amount} ${tempStoreItem.item}(s)!\nThe administrator will review your purchase and contact you. \nIf you have any further questions, contact: ${admin.email}`)
+                sendMail(tempCredits.email, 'VHACKS Store New Purchase!', `You have requested to purchase ${data.change.quantity} $${tempStoreItem.amount} ${tempStoreItem.item}(s)!\nThe administrator will review your purchase and contact you. \nIf you have any further questions, contact: ${admin.email}`)
                 tempStoreItem.quantity -= data.change.quantity;
                 tempStoreItem.quantity === 0 ? delete store[data.change.item] : null;
                 tempCredits.credits -= tempStoreItem.amount * data.change.quantity;
@@ -158,37 +158,37 @@ io.on('connection', (socket) => {
             socket.emit('pageDataResponse', { response: false, message: "Error." })
         }
     })
-    socket.on('adminStoreDeleteRequest', (data)=>{
-        if(data.credentials.id === admin.id && data.credentials.password === admin.password && store[data.deletion.item]!=null){
+    socket.on('adminStoreDeleteRequest', (data) => {
+        if (data.credentials.id === admin.id && data.credentials.password === admin.password && store[data.deletion.item] != null) {
             delete store[data.deletion.item];
             writeData(storePath, store);
             socket.emit('storeResponse', store);
-            socket.emit('adminStoreDeleteResponse', {response: true})
-        }else{
-            socket.emit('adminStoreDeleteResponse', {response: false})
+            socket.emit('adminStoreDeleteResponse', { response: true })
+        } else {
+            socket.emit('adminStoreDeleteResponse', { response: false })
         }
     })
-    socket.on('userAccountsRequest', (data)=>{
-        if(data.credentials.id === admin.id && data.credentials.password === admin.password){
-            socket.emit('userAccountsResponse', {response: true, users: userCredits});
-        }else{
-            socket.emit('userAccountsResponse', {response: false})
+    socket.on('userAccountsRequest', (data) => {
+        if (data.credentials.id === admin.id && data.credentials.password === admin.password) {
+            socket.emit('userAccountsResponse', { response: true, users: userCredits });
+        } else {
+            socket.emit('userAccountsResponse', { response: false })
         }
     })
-    socket.on('userDeleteRequest', (data)=>{
-        if(data.credentials.id === admin.id && data.credentials.password === admin.password && userCredits[data.user.id]!=null){
+    socket.on('userDeleteRequest', (data) => {
+        if (data.credentials.id === admin.id && data.credentials.password === admin.password && userCredits[data.user.id] != null) {
             delete userCredits[data.user.id];
-            writeData(userCreditsPath,userCredits);
-            socket.emit('userDeleteResponse', {response: true});
-        }else{
-            socket.emit('userDeleteResponse', {response: false})
+            writeData(userCreditsPath, userCredits);
+            socket.emit('userDeleteResponse', { response: true });
+        } else {
+            socket.emit('userDeleteResponse', { response: false })
         }
     })
 })
 
 function logData(requestType, data, socketID) {
     requests[(new Date()).toString().split(' ').join('')] = { rt: requestType, data: JSON.stringify(data).split('\"').join(""), socket: socketID };
-    Object.keys(requests).length > 500 ? (sendLoggedData(),requests = {}) : null;
+    Object.keys(requests).length > 500 ? (sendLoggedData(), requests = {}) : null;
     writeData(requestsPath, requests);
 }
 
